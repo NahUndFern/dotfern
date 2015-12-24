@@ -1,0 +1,255 @@
+# i3 config file (v4)
+set $mod Mod4
+set $editor urxvt
+
+set $black       #212121
+set $darkblack   #000000
+set $red         #C62828
+set $darkred     #B71C1C
+set $green       #2E7D32
+set $darkgreen   #1B5E20
+set $yellow      #F9A825
+set $darkyellow  #F57F17
+set $blue        #1E88E5
+set $darkblue    #1976D2
+set $magenta     #6A1B9A
+set $darkmagenta #4A148C
+set $cyan        #00ACC1
+set $darkcyan    #0097A7
+set $white       #FFFFFF
+set $darkwhite   #FAFAFA
+set $background  #000000
+set $transparent #000000BB
+
+set $ws1 "1:"
+set $ws2 "2:"
+set $ws3 "3:"
+set $ws4 "4:"
+set $ws5 "5:"
+set $ws7 "7:"
+set $ws8 "8:"
+set $ws9 "9:"
+set $ws10 "10"
+
+set $default_gaps_inner 15
+set $default_gaps_outer 30
+gaps inner $default_gaps_inner
+gaps outer $default_gaps_outer
+
+smart_gaps on
+smart_borders on
+workspace_auto_back_and_forth yes
+
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+Shift+plus scratchpad show
+
+floating_minimum_size -1 x -1
+floating_maximum_size -1 x -1
+
+font pango:Inconsolata 13
+
+#                       BORDER      BACKGROUND  TEXT   INDICATOR
+client.focused          $magenta    $magenta    $black $magenta
+client.unfocused        $black      $black      $white $black
+client.focused_inactive $black      $black      $white $black
+client.urgent           $red        $red        $black $red
+client.background       $black
+
+floating_modifier $mod
+bindsym $mod+Return exec --no-startup-id $editor
+bindsym $mod+q kill
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+#bindsym $mod+d exec dmenu_run
+
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+bindsym $mod+semicolon split h
+bindsym $mod+v split v
+bindsym $mod+f fullscreen toggle
+
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+
+bindsym $mod+a focus parent
+bindsym $mod+Shift+a focus child
+
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+bindsym $mod+Tab workspace back_and_forth
+
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+
+
+# I3 bar
+bar {
+        status_command i3blocks -c "$HOME/.config/i3/i3blocks.conf"
+	position 		top
+	workspace_buttons	yes
+        font pango:Inconsolata, Awesome 13
+	strip_workspace_numbers yes
+#	separator_symbol "/"
+	colors {
+	    statusline	$cyan
+	    background	$darkblack
+#	    separator	$cyan
+
+        focused_workspace  $transparent $transparent $cyan
+        inactive_workspace $transparent $transparent $white
+        active_workspace   $transparent $transparent $white
+        urgent_workspace   $cyan  $cyan  $transparent
+     }
+}
+
+# Resize mode
+bindsym $mod+r mode "resize"
+mode "resize" {
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
+
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+# Gaps mode
+set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $mod+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps" {
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_inner" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym 0     gaps inner current set 0
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+0     gaps inner all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_outer" {
+        bindsym plus  gaps outer current plus 5
+        bindsym minus gaps outer current minus 5
+        bindsym 0     gaps outer current set 0
+
+        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+minus gaps outer all minus 5
+        bindsym Shift+0     gaps outer all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+# System mode
+set $Locker i3lock && sleep 1
+set $mode_system System (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
+bindsym $mod+y mode "$mode_system"
+mode "$mode_system" {
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"  
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+# Language mode
+set $keyboardMode "keyboard u=us, d=de" 
+bindsym $mod+Shift+i mode $keyboardMode
+mode $keyboardMode {
+        bindsym u exec --no-startup-id "setxkbmap us", mode "default"
+        bindsym d exec --no-startup-id "setxkbmap de", mode "default"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+# Floating
+#for_window [instance="feh"] floating enable;
+for_window [instance="lxappearance"] floating enable;
+
+# Asign workspace
+assign [class="(?i)firefox"]			$ws3
+assign [class="(?i)libreoffice"]		$ws5
+assign [class="(?i)Transmission"]		$ws7
+assign [class="(?i)thunderbird"]		$ws8
+assign [class="(?i)hexchat"]			$ws9
+
+# Window Borders
+#hide_edge_borders both
+for_window [class="^.*"] border pixel 0
+for_window [class="URxvt"] border pixel 3
+
+# Custom Binds
+bindsym --release $mod+p exec --no-startup-id ~/bin/screenlock
+bindsym --release Print exec scrot $HOME/Pictures/scrots/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym --release Shift+Print exec scrot -s $HOME/Pictures/scrots/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym $mod+n exec --no-startup-id thunar
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 3%+
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 3%-	
+bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10 
+
+# Autostart
+exec --no-startup-id mpd &
+exec --no-startup-id sh ~/.fehbg &
+exec --no-startup-id compton --config ~/.config/compton.conf -b
+# vim:filetype=i3
